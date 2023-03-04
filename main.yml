@@ -1,0 +1,36 @@
+---
+- name: "installing LAMP stack"
+  hosts: amazon
+  become: yes
+  vars_files: variables.yml
+  tasks:
+ 
+    - name: "installing httpd"
+      yum:
+        name: httpd
+        state: present
+ 
+    - name: "starting/enabling httpd service"
+      service:
+        name: httpd
+        state: restarted
+        enabled: true
+ 
+    - name: "creating httpd conf file from template"
+      template:
+        src: "./httpd.conf.j2"
+        dest: "/etc/httpd/conf/httpd.conf"
+ 
+    - name: "creating virtualhost from template"
+      template:
+        src: "./virtualhost.conf.j2"
+        dest: "/etc/httpd/conf.d/{{ httpd_domain }}.conf"
+        owner: "{{ httpd_owner }}"
+        group: "{{ httpd_group }}"
+ 
+    - name: "creating document root"
+      file:
+        path: "/var/www/html/{{ httpd_domain }}"
+        state: directory
+        owner: "{{ httpd_owner }}"
+        group: "{{ httpd_group }}"
