@@ -3,3 +3,7 @@ httpd_owner: "apache"
 httpd_owner: "apache"
 httpd_port: "8080"
 httpd_domain: "git.1by2.online"
+mariadb_root_pass: admin123
+mariadb_extra_user: sree
+mariadb_extra_pass: sree123
+mariadb_extra_db: new_db

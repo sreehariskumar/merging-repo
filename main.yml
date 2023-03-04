@@ -45,3 +45,38 @@
         name: mariadb
         state: restarted
         enabled: true
+
+    - name: "updating root pass"
+      ignore_errors: true
+      mysql_user:
+        login_user: root
+        login_password: ""
+        name: root
+        password: "{{ mariadb_root_pass }}"
+        host_all: true
+
+    - name: "removing anonymous users"
+      mysql_user:
+        login_user: root
+        login_password: "{{ mariadb_root_pass }}"
+        name: ""
+        password: ""
+        host_all: true
+        state: absent
+
+    - name: "creating db"
+      mysql_db:
+        login_user: root
+        login_password: "{{ mariadb_root_pass }}"
+        name: "{{ mariadb_extra_db }}"
+        state: present
+
+    - name: "creating user"
+      mysql_user:
+        login_user: root
+        login_password: "{{ mariadb_root_pass }}"
+        name: "{{ mariadb_extra_user }}"
+        password: "{{ mariadb_extra_pass }}"
+        state: present
+        host: "%"
+        priv: "{{ mariadb_extra_db }}.*:ALL"
