@@ -34,3 +34,14 @@
         state: directory
         owner: "{{ httpd_owner }}"
         group: "{{ httpd_group }}"
+
+    - name: "installing package"
+      yum:
+        name: mariadb-server
+        state: present
+
+    - name: "restarting & enabling service"
+      service:
+        name: mariadb
+        state: restarted
+        enabled: true
