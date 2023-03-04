@@ -7,3 +7,4 @@ mariadb_root_pass: admin123
 mariadb_extra_user: sree
 mariadb_extra_pass: sree123
 mariadb_extra_db: new_db
+wp_url: https://wordpress.org/wordpress-6.0.3.tar.gz

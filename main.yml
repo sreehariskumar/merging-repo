@@ -80,3 +80,32 @@
         state: present
         host: "%"
         priv: "{{ mariadb_extra_db }}.*:ALL"
+
+    - name: "enabling php"
+      shell: amazon-linux-support install php7.4 -y
+
+    - name: "Wordpress - downloading archive"
+      get_url:
+        url: "{{ wp_url }}"
+        dest: "/tmp/wordpress.tar.gz"
+
+    - name: "Wordpress - extracting archive"
+      unarchive:
+        src: "/tmp/wordpress.tar.gz"
+        dest: "/tmp/"
+        remote_src: true
+
+    - name: "Wordpress - copying files"
+      copy:
+        src: "/tmp/wordpress/"
+        dest: "/var/www/html/{{ httpd_domain }}/"
+        remote_src: true
+        owner: "{{ httpd_owner }}"
+        group: "{{ httpd_group }}"
+
+    - name: "Wordpress - creating wp-config file from template"
+      template:
+        src: "./wp-config.php.j2"
+        dest: "/var/www/html/{{ httpd_domain }}/wp-config.php"
+        owner: "{{ httpd_owner }}"
+        group: "{{ httpd_group }}"
